@@ -22,4 +22,23 @@ describe "Customers API" do
     expect(response).to be_successful
     expect(customer["data"]["id"]).to eq(id)
   end
+  context "parameter search" do
+    it "can find a single object by id" do
+      id = create(:customer).id.to_s
+
+      get "/api/v1/customers/find?id=#{id}"
+
+      customer = JSON.parse(response.body)
+      expect(response).to be_successful
+      expect(customer["data"]["id"]).to eq(id)
+    end
+    xit "can find a single object by name" do
+      name = create(:customer).name
+
+      get "/api/v1/customers/find?name=#{name}"
+      customer = JSON.parse(response.body)
+      expect(response).to be_successful
+      expect(customer["data"]["name"]).to eq(name)
+    end
+  end
 end

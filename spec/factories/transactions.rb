@@ -3,6 +3,6 @@ FactoryBot.define do
     invoice { nil }
     credit_card_number { "" }
     credit_card_expiration_date { "2019-01-23" }
-    result { "MyString" }
+    result { "TransactionResult" }
   end
 end

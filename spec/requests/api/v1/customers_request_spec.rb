@@ -61,5 +61,14 @@ describe "Customers API" do
       expect(response).to be_successful
       expect(customer["data"][0]["attributes"]["id"]).to eq(id)
     end
+    it "can find all matches based on first_name" do
+      first_name = create(:customer).first_name
+
+      get "/api/v1/customers/find_all?first_name=#{first_name}"
+
+      customer = JSON.parse(response.body)
+      expect(response).to be_successful
+      expect(customer["data"][0]["attributes"]["first_name"]).to eq(first_name)
+    end
   end
 end

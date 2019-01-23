@@ -62,22 +62,44 @@ describe "Customers API" do
       expect(customer["data"][0]["attributes"]["id"]).to eq(id)
     end
     it "can find all matches based on first_name" do
-      first_name = create(:customer).first_name
+      customer_1 = create(:customer, first_name: "George")
+      customer_2 = create(:customer, first_name: "George")
+      customer_3 = create(:customer, first_name: "George")
+      customer_4 = create(:customer, first_name: "Sam")
 
-      get "/api/v1/customers/find_all?first_name=#{first_name}"
+      get "/api/v1/customers/find_all?first_name=#{customer_1.first_name}"
 
       customer = JSON.parse(response.body)
       expect(response).to be_successful
-      expect(customer["data"][0]["attributes"]["first_name"]).to eq(first_name)
+      expect(customer["data"][0]["attributes"]["first_name"]).to eq(customer_1.first_name)
+      expect(customer["data"][1]["attributes"]["first_name"]).to eq(customer_1.first_name)
+      expect(customer["data"][-1]["attributes"]["first_name"]).to eq(customer_1.first_name)
+      expect(customer["data"].count).to eq(3)
     end
     it "can find all matches based on last_name" do
-      last_name = create(:customer).last_name
+      customer_1 = create(:customer, last_name: "George")
+      customer_2 = create(:customer, last_name: "George")
+      customer_3 = create(:customer, last_name: "George")
+      customer_4 = create(:customer, last_name: "Sam")
 
-      get "/api/v1/customers/find_all?last_name=#{last_name}"
+
+      get "/api/v1/customers/find_all?last_name=#{customer_1.last_name}"
 
       customer = JSON.parse(response.body)
       expect(response).to be_successful
-      expect(customer["data"][0]["attributes"]["last_name"]).to eq(last_name)
+      expect(customer["data"][0]["attributes"]["last_name"]).to eq(customer_1.last_name)
+      expect(customer["data"][1]["attributes"]["last_name"]).to eq(customer_1.last_name)
+      expect(customer["data"][-1]["attributes"]["last_name"]).to eq(customer_1.last_name)
+      expect(customer["data"].count).to eq(3)
     end
+  end
+  xit "returns a random resource" do
+    customer_id = create(:customer).id
+
+    get "/api/v1/customers.random"
+
+    customer = JSON.parse(response.body)
+    expect(response).to be_successful
+    exepct(customer["data"]["id"]).to eq(customer_id)
   end
 end

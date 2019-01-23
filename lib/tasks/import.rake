@@ -2,38 +2,32 @@ require 'csv'
 
 desc "Imports a CSV of all entities"
 task :customer_import => :environment do
-  filename = File.join Rails.root, '/db/data/customers.csv'
-  CSV.foreach(filename, :headers => true ) do |row|
+  CSV.foreach('./db/data/customers.csv', :headers => true ) do |row|
     Customer.create!(row.to_h)
   end
 end
 task :merchant_import => :environment do
-  filename = File.join Rails.root, '/db/data/merchants.csv'
-  CSV.foreach(filename, :headers => true ) do |row|
+  CSV.foreach('./db/data/merchants.csv', :headers => true ) do |row|
     Merchant.create!(row.to_h)
   end
 end
 task :item_import => :environment do
-  filename = File.join Rails.root, '/db/data/items.csv'
-  CSV.foreach(filename, :headers => true ) do |row|
+  CSV.foreach('./db/data/items.csv', :headers => true ) do |row|
     Item.create!(row.to_h)
   end
 end
 task :invoice_import => :environment do
-  filename = File.join Rails.root, '/db/data/invoices.csv'
-  CSV.foreach(filename, :headers => true ) do |row|
+  CSV.foreach('./db/data/invoices.csv', :headers => true ) do |row|
     Invoice.create!(row.to_h)
   end
 end
 task :invoice_items_import => :environment do
-  filename = File.join Rails.root, '/db/data/invoice_items.csv'
-  CSV.foreach(filename, :headers => true ) do |row|
+  CSV.foreach('./db/data/invoice_items.csv', :headers => true ) do |row|
     InvoiceItem.create!(row.to_h)
   end
 end
 task :transaction_import => :environment do
-  filename = File.join Rails.root, '/db/data/transactions.csv'
-  CSV.foreach(filename, :headers => true ) do |row|
+  CSV.foreach('./db/data/transactions.csv', :headers => true ) do |row|
     Transaction.create!(row.to_h)
   end
 end

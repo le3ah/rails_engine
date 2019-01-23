@@ -19,3 +19,9 @@ task :item_import => :environment do
     Item.create!(row.to_h)
   end
 end
+task :invoice_import => :environment do
+  filename = File.join Rails.root, '/db/data/invoices.csv'
+  CSV.foreach(filename, :headers => true ) do |row|
+    Invoice.create!(row.to_h)
+  end
+end

@@ -52,7 +52,7 @@ describe "Merchants API" do
       expect(response).to be_successful
       expect(merchant["data"][0]["attributes"]["id"]).to eq(id)
     end
-    xit "can find all matches based on name" do
+    it "can find all matches based on name" do
       customer_1 = create(:merchant, name: "George")
       customer_2 = create(:merchant, name: "George")
       customer_3 = create(:merchant, name: "George")
@@ -68,9 +68,9 @@ describe "Merchants API" do
       expect(merchant["data"].count).to eq(3)
     end
   end
-  xit "returns a random resource" do
-    customer_1 = create(:merchant)
-    customer_2 = create(:merchant)
+  it "returns a random resource" do
+    merchant_1 = create(:merchant)
+    merchant_2 = create(:merchant)
 
     get "/api/v1/merchants/random"
 

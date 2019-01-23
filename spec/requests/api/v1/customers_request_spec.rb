@@ -82,7 +82,6 @@ describe "Customers API" do
       customer_3 = create(:customer, last_name: "George")
       customer_4 = create(:customer, last_name: "Sam")
 
-
       get "/api/v1/customers/find_all?last_name=#{customer_1.last_name}"
 
       customer = JSON.parse(response.body)
@@ -93,13 +92,16 @@ describe "Customers API" do
       expect(customer["data"].count).to eq(3)
     end
   end
-  xit "returns a random resource" do
-    customer_id = create(:customer).id
+  it "returns a random resource" do
+    customer_1 = create(:customer)
+    customer_2 = create(:customer)
 
-    get "/api/v1/customers.random"
+    get "/api/v1/customers/random"
 
     customer = JSON.parse(response.body)
     expect(response).to be_successful
-    exepct(customer["data"]["id"]).to eq(customer_id)
+
+    expect(customer.count).to eq(1)
+    expect(customer["data"]["type"]).to eq("customer")
   end
 end

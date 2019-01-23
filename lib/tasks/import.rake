@@ -13,3 +13,9 @@ task :merchant_import => :environment do
     Merchant.create!(row.to_h)
   end
 end
+task :item_import => :environment do
+  filename = File.join Rails.root, '/db/data/items.csv'
+  CSV.foreach(filename, :headers => true ) do |row|
+    Item.create!(row.to_h)
+  end
+end

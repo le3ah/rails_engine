@@ -41,5 +41,14 @@ describe "Customers API" do
 
       expect(customer["data"]["attributes"]["first_name"]).to eq(first_name)
     end
+    it "can find a single object by last name" do
+      last_name = create(:customer).last_name
+
+      get "/api/v1/customers/find?last_name=#{last_name}"
+      customer = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(customer["data"]["attributes"]["last_name"]).to eq(last_name)
+    end
   end
 end

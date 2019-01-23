@@ -13,7 +13,7 @@ describe "Merchants API" do
     expect(merchants["data"].count).to eq(3)
 
   end
-  xit "can get one merchant by its id" do
+  it "can get one merchant by its id" do
     id = create(:merchant).id.to_s
 
     get "/api/v1/merchants/#{id}"
@@ -23,7 +23,7 @@ describe "Merchants API" do
     expect(merchant["data"]["id"]).to eq(id)
   end
   context "parameter find search" do
-    xit "can find a single object by id" do
+    it "can find a single object by id" do
       id = create(:merchant).id.to_s
 
       get "/api/v1/merchants/find?id=#{id}"

@@ -81,7 +81,7 @@ describe "Merchants API" do
     expect(merchant["data"]["type"]).to eq("merchant")
   end
   context "business intelligence" do
-    xit "returns the top x merchants ranked by total revenue" do
+    it "returns the top x merchants ranked by total revenue" do
       merchant_1 = create(:merchant)
       merchant_2 = create(:merchant)
       merchant_3 = create(:merchant)
@@ -106,13 +106,17 @@ describe "Merchants API" do
       invoice_item_3 = create(:invoice_item, quantity: 3, unit_price: 200, item_id: item_3.id, invoice_id: invoice_3.id)
       invoice_item_4 = create(:invoice_item, quantity: 4, unit_price: 1000, item_id: item_4.id, invoice_id: invoice_4.id)
 
+      transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success")
+      transaction_2 = create(:transaction, invoice_id: invoice_2.id, result: "success")
+      transaction_3 = create(:transaction, invoice_id: invoice_3.id, result: "success")
+      transaction_4 = create(:transaction, invoice_id: invoice_4.id, result: "success")
+
       x = 3
       get "/api/v1/merchants/most_revenue?quantity=#{x}"
 
       merchant = JSON.parse(response.body)
       expect(response).to be_successful
-
-      expect(merchant.count).to eq(3)
+      expect(merchant["data"].count).to eq(3)
     end
   end
 end

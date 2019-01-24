@@ -10,7 +10,5 @@ class Merchant < ApplicationRecord
     .where("transactions.result = ?", "success")
     .order("total_revenue desc")
     .limit(x)
-    # .where(item_id: "invoice_items.item_id")
-    # .where(invoice_id: "invoice_items.invoice_id")
   end
 end

@@ -36,10 +36,10 @@ RSpec.describe Merchant, type: :model do
       invoice_item_3 = create(:invoice_item, quantity: 3, unit_price: 200, item_id: item_3.id, invoice_id: invoice_3.id)
       invoice_item_4 = create(:invoice_item, quantity: 4, unit_price: 1000, item_id: item_4.id, invoice_id: invoice_4.id)
 
-      transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success")
-      transaction_2 = create(:transaction, invoice_id: invoice_2.id, result: "success")
-      transaction_3 = create(:transaction, invoice_id: invoice_3.id, result: "success")
-      transaction_4 = create(:transaction, invoice_id: invoice_4.id, result: "success")
+      @transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+      @transaction_2 = create(:transaction, invoice_id: invoice_2.id, result: "success", updated_at: "012-03-25 14:54:09 UTC")
+      @transaction_3 = create(:transaction, invoice_id: invoice_3.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+      @transaction_4 = create(:transaction, invoice_id: invoice_4.id, result: "success", updated_at: "012-03-17 14:54:09 UTC")
     end
     it ".most_revenue" do
       x = 3
@@ -53,5 +53,11 @@ RSpec.describe Merchant, type: :model do
       expect(Merchant.most_items(x)[1]).to eq(@merchant_3)
       expect(Merchant.most_items(x)[-1]).to eq(@merchant_2)
     end
+    it ".revenue_date" do
+      x = @transaction_1.updated_at
+    
+      expect(Merchant.revenue_date(x).total_revenue).to eq(650)
+    end
   end
+
 end

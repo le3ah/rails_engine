@@ -20,4 +20,13 @@ class Merchant < ApplicationRecord
     .order("total_items desc")
     .limit(x)
   end
+
+  def self.revenue_date(x)
+    InvoiceItem.joins(:invoice)
+    .joins(invoice: :transactions)
+    .select("sum(invoice_items.unit_price * invoice_items.quantity) AS total_revenue" )
+    .where("transactions.result = ?", "success")
+    .where("transactions.updated_at = ?", x)
+    .group("transactions.updated_at")[0]
+  end
 end

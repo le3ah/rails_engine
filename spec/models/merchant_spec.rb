@@ -16,6 +16,7 @@ RSpec.describe Merchant, type: :model do
       merchant_3 = create(:merchant)
       merchant_4 = create(:merchant)
       merchant_5 = create(:merchant)
+
       customer_1 = create(:customer)
 
       item_1 = create(:item, merchant: merchant_1)
@@ -35,23 +36,15 @@ RSpec.describe Merchant, type: :model do
       invoice_item_3 = create(:invoice_item, quantity: 3, unit_price: 200, item_id: item_3.id, invoice_id: invoice_3.id)
       invoice_item_4 = create(:invoice_item, quantity: 4, unit_price: 1000, item_id: item_4.id, invoice_id: invoice_4.id)
 
+      transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success")
+      transaction_2 = create(:transaction, invoice_id: invoice_2.id, result: "success")
+      transaction_3 = create(:transaction, invoice_id: invoice_3.id, result: "success")
+      transaction_4 = create(:transaction, invoice_id: invoice_4.id, result: "success")
+
       x = 3
-      expect(Merchant.most_revenue(x).count).to eq(3)
       expect(Merchant.most_revenue(x)[0]).to eq(merchant_4)
       expect(Merchant.most_revenue(x)[1]).to eq(merchant_3)
       expect(Merchant.most_revenue(x)[-1]).to eq(merchant_2)
-    end
-  end
-  describe 'instance methods' do
-    it "#total_revenue" do
-      merchant_1 = create(:merchant)
-      customer_1 = create(:customer)
-      item_1 = create(:item, merchant: merchant_1)
-      invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
-      transaction_1 = create(:transaction, invoice_id: invoice_1.id)
-      invoice_item_1 = create(:invoice_item, quantity: 2, unit_price: 50, item_id: item_1.id, invoice_id: invoice_1.id)
-
-      expect(merchant_1.total_revenue).to eq(100)
     end
   end
 end

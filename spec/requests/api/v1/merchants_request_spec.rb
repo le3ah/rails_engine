@@ -81,7 +81,7 @@ describe "Merchants API" do
     expect(merchant["data"]["type"]).to eq("merchant")
   end
   context "business intelligence" do
-    it "returns the top x merchants ranked by total revenue" do
+    xit "returns the top x merchants ranked by total revenue" do
       merchant_1 = create(:merchant)
       merchant_2 = create(:merchant)
       merchant_3 = create(:merchant)

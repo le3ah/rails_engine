@@ -5,8 +5,6 @@ RSpec.describe Merchant, type: :model do
     it { should have_many :items }
     it { should have_many :invoices }
     it { should have_many(:customers).through(:invoices) }
-
-
   end
 
   describe  'class methods' do
@@ -55,9 +53,41 @@ RSpec.describe Merchant, type: :model do
     end
     it ".revenue_date" do
       x = @transaction_1.updated_at
-    
+
       expect(Merchant.revenue_date(x).total_revenue).to eq(650)
     end
   end
+  describe  'instance methods' do
+    before :each do
+      @merchant = create(:merchant)
+      @merchant_10 = create(:merchant)
+      @customer = create(:customer)
 
+      @item_1 = create(:item, merchant: @merchant_10)
+      @item_2 = create(:item, merchant: @merchant)
+      @item_3 = create(:item, merchant: @merchant)
+      @item_4 = create(:item, merchant: @merchant)
+      @item_5 = create(:item, merchant: @merchant)
+
+      @invoice_1 = create(:invoice, merchant: @merchant_10, customer: @customer)
+      @invoice_2 = create(:invoice, merchant: @merchant, customer: @customer)
+      @invoice_3 = create(:invoice, merchant: @merchant, customer: @customer)
+      @invoice_4 = create(:invoice, merchant: @merchant, customer: @customer)
+      @invoice_5 = create(:invoice, merchant: @merchant, customer: @customer)
+
+      @invoice_item_1 = create(:invoice_item, quantity: 1, unit_price: 50, item_id: @item_1.id, invoice_id: @invoice_1.id)
+      @invoice_item_2 = create(:invoice_item, quantity: 2, unit_price: 100, item_id: @item_2.id, invoice_id: @invoice_2.id)
+      @invoice_item_3 = create(:invoice_item, quantity: 3, unit_price: 200, item_id: @item_3.id, invoice_id: @invoice_3.id)
+      @invoice_item_4 = create(:invoice_item, quantity: 4, unit_price: 1000, item_id: @item_4.id, invoice_id: @invoice_4.id)
+
+      @transaction_1 = create(:transaction, invoice_id: @invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+      @transaction_2 = create(:transaction, invoice_id: @invoice_2.id, result: "success", updated_at: "012-03-25 14:54:09 UTC")
+      @transaction_3 = create(:transaction, invoice_id: @invoice_3.id, result: "failed", updated_at: "012-03-27 14:54:09 UTC")
+      @transaction_4 = create(:transaction, invoice_id: @invoice_4.id, result: "success", updated_at: "012-03-17 14:54:09 UTC")
+    end
+    it "#single_merchant_revenue" do
+      expect(@merchant.single_merchant_revenue(@merchant.id).total_revenue).to eq(4200)
+      expect(@merchant_10.single_merchant_revenue(@merchant_10.id).total_revenue).to eq(50)
+    end
+  end
 end

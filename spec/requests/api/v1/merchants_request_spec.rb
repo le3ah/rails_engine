@@ -81,7 +81,7 @@ describe "Merchants API" do
     expect(merchant.count).to eq(1)
     expect(merchant["data"]["type"]).to eq("merchant")
   end
-  context "business intelligence" do
+  context "All merchants business intelligence" do
     before :each do
       @merchant_1 = create(:merchant)
       @merchant_2 = create(:merchant)
@@ -141,6 +141,42 @@ describe "Merchants API" do
       merchant = JSON.parse(response.body)
       expect(response).to be_successful
       expect(merchant["data"]["attributes"]["total_revenue"]).to eq(650)
+    end
+  end
+  context 'Single Merchant business intelligence' do
+    before :each do
+      @merchant = create(:merchant)
+      @merchant_10 = create(:merchant)
+      @customer = create(:customer)
+
+      @item_1 = create(:item, merchant: @merchant_10)
+      @item_2 = create(:item, merchant: @merchant)
+      @item_3 = create(:item, merchant: @merchant)
+      @item_4 = create(:item, merchant: @merchant)
+      @item_5 = create(:item, merchant: @merchant)
+
+      @invoice_1 = create(:invoice, merchant: @merchant_10, customer: @customer)
+      @invoice_2 = create(:invoice, merchant: @merchant, customer: @customer)
+      @invoice_3 = create(:invoice, merchant: @merchant, customer: @customer)
+      @invoice_4 = create(:invoice, merchant: @merchant, customer: @customer)
+      @invoice_5 = create(:invoice, merchant: @merchant, customer: @customer)
+
+      @invoice_item_1 = create(:invoice_item, quantity: 1, unit_price: 50, item_id: @item_1.id, invoice_id: @invoice_1.id)
+      @invoice_item_2 = create(:invoice_item, quantity: 2, unit_price: 100, item_id: @item_2.id, invoice_id: @invoice_2.id)
+      @invoice_item_3 = create(:invoice_item, quantity: 3, unit_price: 200, item_id: @item_3.id, invoice_id: @invoice_3.id)
+      @invoice_item_4 = create(:invoice_item, quantity: 4, unit_price: 1000, item_id: @item_4.id, invoice_id: @invoice_4.id)
+
+      @transaction_1 = create(:transaction, invoice_id: @invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+      @transaction_2 = create(:transaction, invoice_id: @invoice_2.id, result: "success", updated_at: "012-03-25 14:54:09 UTC")
+      @transaction_3 = create(:transaction, invoice_id: @invoice_3.id, result: "failed", updated_at: "012-03-27 14:54:09 UTC")
+      @transaction_4 = create(:transaction, invoice_id: @invoice_4.id, result: "success", updated_at: "012-03-17 14:54:09 UTC")
+    end
+    it "returns the revenue for a single merchant across successful transactions" do
+
+      get "/api/v1/merchants/#{@merchant.id}/revenue"
+      merchant = JSON.parse(response.body)
+      expect(response).to be_successful
+      expect(merchant["data"]["attributes"]["total_revenue"]).to eq(4200)
     end
   end
 end

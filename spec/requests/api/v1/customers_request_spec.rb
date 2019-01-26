@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'pry'
 
 describe "Customers API" do
   it "sends a lits of customers" do
@@ -103,5 +104,31 @@ describe "Customers API" do
 
     expect(customer.count).to eq(1)
     expect(customer["data"]["type"]).to eq("customer")
+  end
+  it "returns a merchant where the customer has conducted the most successful transactions" do
+    customer_1 = create(:customer)
+    merchant_1 = create(:merchant)
+    merchant_2 = create(:merchant)
+
+    item_1 = create(:item, merchant: merchant_1)
+    item_2 = create(:item, merchant: merchant_2)
+    invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
+    invoice_2 = create(:invoice, merchant: merchant_2, customer: customer_1)
+    invoice_3 = create(:invoice, merchant: merchant_2, customer: customer_1)
+
+    invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
+    invoice_2 = create(:invoice, merchant: merchant_2, customer: customer_1)
+    invoice_3 = create(:invoice, merchant: merchant_2, customer: customer_1)
+    transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+    transaction_2 = create(:transaction, invoice_id: invoice_2.id, result: "success", updated_at: "012-03-25 14:54:09 UTC")
+    transaction_3 = create(:transaction, invoice_id: invoice_3.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+
+    get "/api/v1/customers/#{customer_1.id}/favorite_merchant"
+
+    customers = JSON.parse(response.body)
+    expect(response).to be_successful
+
+    expect(customers["data"]["type"]).to eq("favorite_merchant")
+    expect(customers["data"]["attributes"]["name"]).to eq(merchant_2.name)
   end
 end

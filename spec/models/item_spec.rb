@@ -83,6 +83,7 @@ RSpec.describe Item, type: :model do
       transaction_6 = create(:transaction, invoice_id: invoice_4.id, result: "success", updated_at: "012-03-17 14:54:09 UTC")
 
       expect(item_1.best_day.updated_at).to eq("012-03-27 14:54:09 UTC")
+      expect(item_2.best_day.updated_at).to eq("012-03-27 14:54:09 UTC")
     end
   end
 end

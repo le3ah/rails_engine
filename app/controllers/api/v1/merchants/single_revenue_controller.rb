@@ -5,7 +5,7 @@ class Api::V1::Merchants::SingleRevenueController < ApplicationController
       revenue = Struct.new(:id, :total_revenue)
 
       merchant_revenue = merchant.revenue_by_day(params[:date])
-      this_merchant = revenue.new(1, merchant_revenue)
+      this_merchant = revenue.new("#{merchant.id}", merchant_revenue)
     else
       this_merchant = merchant.single_merchant_revenue(merchant)
     end

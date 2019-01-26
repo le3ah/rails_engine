@@ -17,21 +17,28 @@ describe "Items API" do
       @item_4 = create(:item, merchant: @merchant_4)
       @item_5 = create(:item, merchant: @merchant_5)
 
-      @invoice_1 = create(:invoice, merchant: @merchant_1, customer: @customer_1)
-      @invoice_2 = create(:invoice, merchant: @merchant_2, customer: @customer_1)
-      @invoice_3 = create(:invoice, merchant: @merchant_3, customer: @customer_1)
-      @invoice_4 = create(:invoice, merchant: @merchant_4, customer: @customer_1)
-      @invoice_5 = create(:invoice, merchant: @merchant_5, customer: @customer_1)
+      @invoice_1 = create(:invoice, merchant: @merchant_1, customer: @customer_1, updated_at: "2012-03-27 14:54:09 UTC")
+      @invoice_2 = create(:invoice, merchant: @merchant_2, customer: @customer_1, updated_at: "2012-03-27 14:54:09 UTC")
+      @invoice_3 = create(:invoice, merchant: @merchant_3, customer: @customer_1, updated_at: "2012-03-17 14:54:09 UTC")
+      @invoice_4 = create(:invoice, merchant: @merchant_4, customer: @customer_1, updated_at: "2012-03-27 14:54:09 UTC")
+      @invoice_5 = create(:invoice, merchant: @merchant_5, customer: @customer_1, updated_at: "2012-03-27 14:54:09 UTC")
+      @invoice_6 = create(:invoice, merchant: @merchant_5, customer: @customer_1, updated_at: "2012-03-17 14:54:09 UTC")
+      @invoice_7 = create(:invoice, merchant: @merchant_5, customer: @customer_1, updated_at: "2012-03-17 14:54:09 UTC")
+      @invoice_8 = create(:invoice, merchant: @merchant_1, customer: @customer_1, updated_at: "2012-03-27 14:54:09 UTC")
 
       @invoice_item_1 = create(:invoice_item, quantity: 1, unit_price: 50, item_id: @item_1.id, invoice_id: @invoice_1.id)
       @invoice_item_2 = create(:invoice_item, quantity: 2, unit_price: 100, item_id: @item_2.id, invoice_id: @invoice_2.id)
       @invoice_item_3 = create(:invoice_item, quantity: 3, unit_price: 200, item_id: @item_3.id, invoice_id: @invoice_3.id)
       @invoice_item_4 = create(:invoice_item, quantity: 4, unit_price: 1000, item_id: @item_4.id, invoice_id: @invoice_4.id)
+      @invoice_item_5 = create(:invoice_item, quantity: 4, unit_price: 1000, item_id: @item_4.id, invoice_id: @invoice_5.id)
+      @invoice_item_6 = create(:invoice_item, quantity: 4, unit_price: 1000, item_id: @item_4.id, invoice_id: @invoice_6.id)
+      @invoice_item_7 = create(:invoice_item, quantity: 4, unit_price: 1000, item_id: @item_4.id, invoice_id: @invoice_7.id)
+      @invoice_item_8 = create(:invoice_item, quantity: 4, unit_price: 1000, item_id: @item_1.id, invoice_id: @invoice_8.id)
 
-      @transaction_1 = create(:transaction, invoice_id: @invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
-      @transaction_2 = create(:transaction, invoice_id: @invoice_2.id, result: "success", updated_at: "012-03-25 14:54:09 UTC")
-      @transaction_3 = create(:transaction, invoice_id: @invoice_3.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
-      @transaction_4 = create(:transaction, invoice_id: @invoice_4.id, result: "success", updated_at: "012-03-17 14:54:09 UTC")
+      @transaction_1 = create(:transaction, invoice_id: @invoice_1.id, result: "success", updated_at: "2012-03-27 14:54:09 UTC")
+      @transaction_2 = create(:transaction, invoice_id: @invoice_2.id, result: "success", updated_at: "2012-03-25 14:54:09 UTC")
+      @transaction_3 = create(:transaction, invoice_id: @invoice_3.id, result: "success", updated_at: "2012-03-27 14:54:09 UTC")
+      @transaction_4 = create(:transaction, invoice_id: @invoice_4.id, result: "success", updated_at: "2012-03-17 14:54:09 UTC")
 
     end
     it "returns the top x items ranked by total revenue generated" do
@@ -55,6 +62,16 @@ describe "Items API" do
       expect(response).to be_successful
       expect(item["data"].count).to eq(x)
       expect(item["data"][0]["type"]).to eq("item")
+    end
+    it "returns the date with the most sales for the given item by invoice date" do
+      get "/api/v1/items/#{@item_1.id}/best_day"
+
+      date = "2012-03-27 14:54:09 UTC"
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+      expect(item["data"]["type"]).to eq("best_day_item")
+      expect(item["data"]["attributes"]["updated_at"][0..9]).to eq(date[0..9])
+
     end
   end
 end

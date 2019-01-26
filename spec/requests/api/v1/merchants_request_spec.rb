@@ -121,6 +121,8 @@ describe "Merchants API" do
       merchant = JSON.parse(response.body)
       expect(response).to be_successful
       expect(merchant["data"].count).to eq(x)
+      expect(merchant["data"][0]["type"]).to eq("merchant")
+      expect(merchant["data"][0]["attributes"]["name"]).to eq(@merchant_4.name)
     end
     it "returns the top x merchants ranked by total number of items sold" do
 

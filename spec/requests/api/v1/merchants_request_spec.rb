@@ -132,6 +132,7 @@ describe "Merchants API" do
       merchant = JSON.parse(response.body)
       expect(response).to be_successful
       expect(merchant["data"].count).to eq(x)
+      expect(merchant["data"][0]["attributes"]["name"]).to eq(@merchant_4.name)
     end
 
     it "returns the total revenue for date x across all merchants" do

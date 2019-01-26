@@ -62,6 +62,7 @@ RSpec.describe Merchant, type: :model do
       @merchant = create(:merchant)
       @merchant_10 = create(:merchant)
       @customer = create(:customer)
+      @customer_10 = create(:customer)
 
       @item_1 = create(:item, merchant: @merchant_10)
       @item_2 = create(:item, merchant: @merchant)
@@ -69,7 +70,7 @@ RSpec.describe Merchant, type: :model do
       @item_4 = create(:item, merchant: @merchant)
       @item_5 = create(:item, merchant: @merchant)
 
-      @invoice_1 = create(:invoice, merchant: @merchant_10, customer: @customer, updated_at: "2012-03-27 14:54:09 UTC")
+      @invoice_1 = create(:invoice, merchant: @merchant_10, customer: @customer_10, updated_at: "2012-03-27 14:54:09 UTC")
       @invoice_2 = create(:invoice, merchant: @merchant, customer: @customer, updated_at: "2012-03-27 14:54:09 UTC")
       @invoice_3 = create(:invoice, merchant: @merchant, customer: @customer, updated_at: "2012-03-17 14:54:09 UTC")
       @invoice_4 = create(:invoice, merchant: @merchant, customer: @customer, updated_at: "2012-03-17 14:54:09 UTC")
@@ -93,6 +94,11 @@ RSpec.describe Merchant, type: :model do
       day = "2012-03-27 14:54:09 UTC"
       expect(@merchant.revenue_by_day(day)).to eq(200)
       expect(@merchant_10.revenue_by_day(day)).to eq(50)
+    end
+    it "#favorite_customer" do
+      expect(@merchant.favorite_customer).to eq(@customer)
+      expect(@merchant.favorite_customer).to_not eq(@customer_10)
+      expect(@merchant_10.favorite_customer).to eq(@customer_10)
     end
   end
 end

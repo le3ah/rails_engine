@@ -147,7 +147,8 @@ describe "Merchants API" do
     before :each do
       @merchant = create(:merchant)
       @merchant_10 = create(:merchant)
-      @customer = create(:customer)
+      @customer = create(:customer, first_name: "Lucille")
+      @customer_10 = create(:customer)
 
       @item_1 = create(:item, merchant: @merchant_10)
       @item_2 = create(:item, merchant: @merchant)
@@ -159,24 +160,26 @@ describe "Merchants API" do
       @invoice_2 = create(:invoice, merchant: @merchant, customer: @customer, updated_at: "012-03-27 14:54:09 UTC")
       @invoice_3 = create(:invoice, merchant: @merchant, customer: @customer, updated_at: "012-03-27 14:54:09 UTC")
       @invoice_4 = create(:invoice, merchant: @merchant, customer: @customer, updated_at: "012-03-17 14:54:09 UTC")
-      @invoice_5 = create(:invoice, merchant: @merchant, customer: @customer, updated_at: "012-03-17 14:54:09 UTC")
+      @invoice_5 = create(:invoice, merchant: @merchant, customer: @customer_10, updated_at: "012-03-17 14:54:09 UTC")
 
       @invoice_item_1 = create(:invoice_item, quantity: 1, unit_price: 50, item_id: @item_1.id, invoice_id: @invoice_1.id)
       @invoice_item_2 = create(:invoice_item, quantity: 2, unit_price: 100, item_id: @item_2.id, invoice_id: @invoice_2.id)
       @invoice_item_3 = create(:invoice_item, quantity: 3, unit_price: 200, item_id: @item_3.id, invoice_id: @invoice_3.id)
       @invoice_item_4 = create(:invoice_item, quantity: 4, unit_price: 1000, item_id: @item_4.id, invoice_id: @invoice_4.id)
+      @invoice_item_5 = create(:invoice_item, quantity: 4, unit_price: 1, item_id: @item_5.id, invoice_id: @invoice_5.id)
 
       @transaction_1 = create(:transaction, invoice_id: @invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
       @transaction_2 = create(:transaction, invoice_id: @invoice_2.id, result: "success", updated_at: "012-03-25 14:54:09 UTC")
       @transaction_3 = create(:transaction, invoice_id: @invoice_3.id, result: "failed", updated_at: "012-03-27 14:54:09 UTC")
       @transaction_4 = create(:transaction, invoice_id: @invoice_4.id, result: "success", updated_at: "012-03-17 14:54:09 UTC")
+      @transaction_5 = create(:transaction, invoice_id: @invoice_5.id, result: "success", updated_at: "012-02-17 14:54:09 UTC")
     end
     it "returns the revenue for a single merchant across successful transactions" do
 
       get "/api/v1/merchants/#{@merchant.id}/revenue"
       merchant = JSON.parse(response.body)
       expect(response).to be_successful
-      expect(merchant["data"]["attributes"]["total_revenue"]).to eq(4200)
+      expect(merchant["data"]["attributes"]["total_revenue"]).to eq(4204)
     end
     it "returns the total revenue for that merchant for invoice date x" do
       x = @invoice_2.updated_at
@@ -185,8 +188,16 @@ describe "Merchants API" do
 
       merchant = JSON.parse(response.body)
       expect(response).to be_successful
-      
+
       expect(merchant["data"]["attributes"]["total_revenue"]).to eq(200)
+    end
+    it "returns the customer who conducted the most successful transactions" do
+
+      get "/api/v1/merchants/#{@merchant.id}/favorite_customer"
+      merchant = JSON.parse(response.body)
+      expect(response).to be_successful
+      expect(merchant["data"]["attributes"]["first_name"]).to eq("Lucille")
+      expect(merchant["data"]["attributes"]["first_name"]).to_not eq("Gob")
     end
   end
 end

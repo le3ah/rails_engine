@@ -46,7 +46,7 @@ describe "Items API" do
       expect(item["data"][0]["attributes"]["name"]).to eq(@item_4.name)
     end
 
-    xit "returns the top x item instances ranked by total number sold" do
+    it "returns the top x item instances ranked by total number sold" do
       x = 3
 
       get "/api/v1/items/most_items?quantity=#{x}"

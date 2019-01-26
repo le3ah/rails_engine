@@ -45,5 +45,11 @@ RSpec.describe Item, type: :model do
       expect(Item.most_revenue(x)[1]).to eq(@item_4)
       expect(Item.most_revenue(x)[-1]).to eq(@item_3)
     end
+    it ".most_quantity_sold" do
+      x = 3
+      expect(Item.most_quantity_sold(x)[0]).to eq(@item_1)
+      expect(Item.most_quantity_sold(x)[1]).to eq(@item_2)
+      expect(Item.most_quantity_sold(x)[-1]).to eq(@item_3)
+    end
   end
 end

@@ -155,11 +155,11 @@ describe "Merchants API" do
       @item_4 = create(:item, merchant: @merchant)
       @item_5 = create(:item, merchant: @merchant)
 
-      @invoice_1 = create(:invoice, merchant: @merchant_10, customer: @customer)
-      @invoice_2 = create(:invoice, merchant: @merchant, customer: @customer)
-      @invoice_3 = create(:invoice, merchant: @merchant, customer: @customer)
-      @invoice_4 = create(:invoice, merchant: @merchant, customer: @customer)
-      @invoice_5 = create(:invoice, merchant: @merchant, customer: @customer)
+      @invoice_1 = create(:invoice, merchant: @merchant_10, customer: @customer, updated_at: "012-03-27 14:54:09 UTC")
+      @invoice_2 = create(:invoice, merchant: @merchant, customer: @customer, updated_at: "012-03-27 14:54:09 UTC")
+      @invoice_3 = create(:invoice, merchant: @merchant, customer: @customer, updated_at: "012-03-27 14:54:09 UTC")
+      @invoice_4 = create(:invoice, merchant: @merchant, customer: @customer, updated_at: "012-03-17 14:54:09 UTC")
+      @invoice_5 = create(:invoice, merchant: @merchant, customer: @customer, updated_at: "012-03-17 14:54:09 UTC")
 
       @invoice_item_1 = create(:invoice_item, quantity: 1, unit_price: 50, item_id: @item_1.id, invoice_id: @invoice_1.id)
       @invoice_item_2 = create(:invoice_item, quantity: 2, unit_price: 100, item_id: @item_2.id, invoice_id: @invoice_2.id)
@@ -177,6 +177,16 @@ describe "Merchants API" do
       merchant = JSON.parse(response.body)
       expect(response).to be_successful
       expect(merchant["data"]["attributes"]["total_revenue"]).to eq(4200)
+    end
+    it "returns the total revenue for that merchant for invoice date x" do
+      x = @invoice_2.updated_at
+
+      get "/api/v1/merchants/#{@merchant.id}/revenue?date=#{x}"
+
+      merchant = JSON.parse(response.body)
+      expect(response).to be_successful
+      
+      expect(merchant["data"]["attributes"]["total_revenue"]).to eq(200)
     end
   end
 end

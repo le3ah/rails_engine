@@ -62,9 +62,9 @@ describe 'Invoice Relationships' do
     transactions = JSON.parse(response.body)
 
     expect(transactions["data"].count).to eq(2)
-    expect(transactions["data"][0]["attributes"]["invoice_id"]).to eq(invoice_1.id)
+    expect(transactions["data"][0]["type"]).to eq("associated_transaction")
   end
-  it "returns a colelction of associated invoice_items" do
+  it "returns a collection of associated invoice_items" do
     customer_1 = create(:customer)
     merchant_1 = create(:merchant)
     merchant_2 = create(:merchant)
@@ -90,10 +90,9 @@ describe 'Invoice Relationships' do
     invoice_items = JSON.parse(response.body)
 
     expect(invoice_items["data"].count).to eq(2)
-    expect(invoice_items["data"][0]["attributes"]["invoice_id"]).to eq(invoice_1.id)
-    expect(invoice_items["data"][-1]["attributes"]["invoice_id"]).to eq(invoice_1.id)
+    expect(invoice_items["data"][0]["type"]).to eq("associated_invoice_item")
   end
-  it "returns a colelction of associated items" do
+  it "returns a collection of associated items" do
     customer_1 = create(:customer)
     merchant_1 = create(:merchant)
     merchant_2 = create(:merchant)
@@ -119,7 +118,7 @@ describe 'Invoice Relationships' do
     items = JSON.parse(response.body)
 
     expect(items["data"].count).to eq(2)
-    expect(items["data"][0]["type"]).to eq("item")
-    expect(items["data"][-1]["type"]).to eq("item")
+    expect(items["data"][0]["type"]).to eq("associated_item")
+    expect(items["data"][-1]["type"]).to eq("associated_item")
   end
 end

@@ -3,6 +3,6 @@ class Api::V1::Invoices::ItemsController < ApplicationController
     invoice = Invoice.find(params[:id])
 
     items = invoice.find_items
-    render json: ItemSerializer.new(items)
+    render json: AssociatedItemSerializer.new(items)
   end
 end

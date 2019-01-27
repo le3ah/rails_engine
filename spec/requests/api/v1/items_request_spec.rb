@@ -34,8 +34,18 @@ describe "Items API" do
 
       item = JSON.parse(response.body)
       expect(response).to be_successful
-      
+
       expect(item["data"]["attributes"]["name"]).to eq(item_1.name)
+    end
+    it "can find a single object by description" do
+      merchant = create(:merchant)
+      item_1 = create(:item, merchant: merchant)
+      get "/api/v1/items/find?description=#{item_1.description}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(item["data"]["attributes"]["description"]).to eq(item_1.description)
     end
   end
   context "All Items Business Intelligence" do

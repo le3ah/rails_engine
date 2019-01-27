@@ -94,5 +94,18 @@ describe "Transactions API" do
 
       expect(transaction["data"]["id"]).to eq(transaction_1.id.to_s)
     end
+    it "can find a single object by updated_at" do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant, customer: customer)
+      transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+
+      get "/api/v1/transactions/find?updated_at=#{transaction_1.updated_at}"
+
+      transaction = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(transaction["data"]["id"]).to eq(transaction_1.id.to_s)
+    end
   end
 end

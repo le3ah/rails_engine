@@ -67,6 +67,16 @@ describe "Items API" do
 
       expect(item["data"]["attributes"]["merchant_id"]).to eq(item_1.merchant_id)
     end
+    it "can find a single object by created_at" do
+      merchant = create(:merchant)
+      item_1 = create(:item, merchant: merchant, created_at: "2012-03-27 14:53:59 UTC")
+      get "/api/v1/items/find?created_at=#{item_1.created_at}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(item["data"]["attributes"]["id"]).to eq(item_1.id)
+    end
   end
   context "All Items Business Intelligence" do
     before :each do

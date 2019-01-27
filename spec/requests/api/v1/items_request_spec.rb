@@ -97,7 +97,18 @@ describe "Items API" do
 
       item = JSON.parse(response.body)
       expect(response).to be_successful
-    
+
+      expect(item["data"][0]["attributes"]["id"]).to eq(item_1.id)
+    end
+    it "can find all matches based on name" do
+      merchant_1 = create(:merchant)
+      item_1 = create(:item, merchant: merchant_1)
+
+      get "/api/v1/items/find_all?name=#{item_1.name}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+
       expect(item["data"][0]["attributes"]["id"]).to eq(item_1.id)
     end
   end

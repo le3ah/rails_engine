@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       resources :items, only: [:index]
       resources :invoices, only: [:index]
       resources :invoice_items, only: [:index]
+      resources :transactions, only: [:index]
     end
   end
 end

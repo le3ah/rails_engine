@@ -82,4 +82,20 @@ describe "Invoices API" do
       expect(invoice["data"]["id"]).to eq(invoice_1.id.to_s)
     end
   end
+  context "parameter find all search" do
+    it "can find all matches based on id" do
+      merchant_1 = create(:merchant)
+      customer_1 = create(:customer)
+      item_1 = create(:item, merchant: merchant_1)
+      invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
+
+
+      get "/api/v1/invoices/find_all?id=#{invoice_1.id}"
+
+      invoice = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(invoice["data"][0]["attributes"]["id"]).to eq(invoice_1.id)
+    end
+  end
 end

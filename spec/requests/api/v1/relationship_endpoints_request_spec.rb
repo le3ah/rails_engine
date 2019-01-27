@@ -121,4 +121,26 @@ describe 'Invoice Relationships' do
     expect(items["data"][0]["type"]).to eq("associated_item")
     expect(items["data"][-1]["type"]).to eq("associated_item")
   end
+  it "returns the associated customer" do
+    customer_1 = create(:customer)
+    customer_2 = create(:customer)
+    merchant_1 = create(:merchant)
+    merchant_2 = create(:merchant)
+
+    item_1 = create(:item, merchant: merchant_1)
+    item_2 = create(:item, merchant: merchant_1)
+    item_3 = create(:item, merchant: merchant_2)
+
+    invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
+    invoice_2 = create(:invoice, merchant: merchant_1, customer: customer_1)
+    invoice_3 = create(:invoice, merchant: merchant_2, customer: customer_1)
+
+    get "/api/v1/invoices/#{invoice_1.id}/customer"
+
+    expect(response).to be_successful
+    invoices = JSON.parse(response.body)
+# binding.pry
+    expect(invoices["data"]["id"]).to eq(customer_1.id.to_s)
+    expect(invoices["data"]["type"]).to eq("associated_customer")
+  end
 end

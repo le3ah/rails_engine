@@ -130,10 +130,7 @@ describe "Customers API" do
 
     item_1 = create(:item, merchant: merchant_1)
     item_2 = create(:item, merchant: merchant_2)
-    invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
-    invoice_2 = create(:invoice, merchant: merchant_2, customer: customer_1)
-    invoice_3 = create(:invoice, merchant: merchant_2, customer: customer_1)
-
+  
     invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
     invoice_2 = create(:invoice, merchant: merchant_2, customer: customer_1)
     invoice_3 = create(:invoice, merchant: merchant_2, customer: customer_1)

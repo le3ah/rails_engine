@@ -31,5 +31,15 @@ describe "Invoices API" do
       expect(response).to be_successful
       expect(invoice["data"]["id"]).to eq(invoice_1.id.to_s)
     end
+    it "can find a single object by customer_id" do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant, customer: customer)
+      get "/api/v1/invoices/find?customer_id=#{invoice_1.customer_id}"
+
+      invoice = JSON.parse(response.body)
+      expect(response).to be_successful
+      expect(invoice["data"]["id"]).to eq(invoice_1.id.to_s)
+    end
   end
 end

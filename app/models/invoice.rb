@@ -8,6 +8,6 @@ class Invoice < ApplicationRecord
   def find_items
     invoice_items.map do |ii|
       Item.find(ii.item_id)
-    end 
+    end
   end
 end

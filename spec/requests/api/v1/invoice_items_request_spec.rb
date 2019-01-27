@@ -54,5 +54,19 @@ describe "Invoice Items API" do
 
       expect(invoice_item["data"]["id"]).to eq(invoice_item_1.id.to_s)
     end
+    it "can find a single object by invoice_id" do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      item_1 = create(:item, merchant: merchant)
+      invoice_1 = create(:invoice, merchant: merchant, customer: customer)
+      invoice_item_1 = create(:invoice_item, quantity: 1, unit_price: 50, item_id: item_1.id, invoice_id: invoice_1.id)
+
+      get "/api/v1/invoice_items/find?invoice_id=#{invoice_item_1.invoice_id}"
+
+      invoice_item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(invoice_item["data"]["id"]).to eq(invoice_item_1.id.to_s)
+    end
   end
 end

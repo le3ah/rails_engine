@@ -25,6 +25,9 @@ Rails.application.routes.draw do
         get "most_items", to: 'most_items#index'
         get "/:id/best_day", to: 'best_day#show'
       end
+      namespace :invoices do
+        get "/:id/transactions", to: 'transactions#index'
+      end
       resources :customers, only: [:index, :show]
       resources :merchants, only: [:index, :show]
       resources :items, only: [:index]

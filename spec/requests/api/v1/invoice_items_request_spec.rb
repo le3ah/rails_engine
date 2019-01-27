@@ -140,5 +140,19 @@ describe "Invoice Items API" do
 
       expect(invoice_item["data"][0]["attributes"]["id"]).to eq(invoice_item_1.id)
     end
+    it "can find all matches based on invoice_id" do
+      merchant_1 = create(:merchant)
+      customer_1 = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
+      item_1 = create(:item, merchant: merchant_1)
+      invoice_item_1 = create(:invoice_item, quantity: 1, unit_price: 50, item_id: item_1.id, invoice_id: invoice_1.id)
+
+      get "/api/v1/invoice_items/find_all?invoice_id=#{invoice_item_1.invoice_id}"
+
+      invoice_item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(invoice_item["data"][0]["attributes"]["id"]).to eq(invoice_item_1.id)
+    end
   end
 end

@@ -135,5 +135,31 @@ describe "Invoices API" do
 
       expect(invoice["data"][0]["attributes"]["id"]).to eq(invoice_1.id)
     end
+    it "can find all matches based on created_at" do
+      merchant_1 = create(:merchant)
+      customer_1 = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1, created_at: "2012-03-25 09:54:09 UTC")
+
+
+      get "/api/v1/invoices/find_all?created_at=#{invoice_1.created_at}"
+
+      invoice = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(invoice["data"][0]["attributes"]["id"]).to eq(invoice_1.id)
+    end
+    it "can find all matches based on updated_at" do
+      merchant_1 = create(:merchant)
+      customer_1 = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1, updated_at: "2012-03-25 09:54:09 UTC")
+
+
+      get "/api/v1/invoices/find_all?updated_at=#{invoice_1.updated_at}"
+
+      invoice = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(invoice["data"][0]["attributes"]["id"]).to eq(invoice_1.id)
+    end
   end
 end

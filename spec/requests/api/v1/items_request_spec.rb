@@ -2,6 +2,21 @@ require 'rails_helper'
 require 'pry'
 
 describe "Items API" do
+  it "sends a list of items" do
+    customer_1 = create(:customer)
+    merchant_1 = create(:merchant)
+
+    item_1 = create(:item, merchant: merchant_1)
+    item_2 = create(:item, merchant: merchant_1)
+    item_3 = create(:item, merchant: merchant_1)
+    get '/api/v1/items'
+
+    expect(response).to be_successful
+    items = JSON.parse(response.body)
+
+    expect(items.count).to eq(1)
+    expect(items["data"].count).to eq(3)
+  end
   context "All Items Business Intelligence" do
     before :each do
       @merchant_1 = create(:merchant)

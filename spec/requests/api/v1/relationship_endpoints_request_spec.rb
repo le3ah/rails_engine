@@ -16,7 +16,7 @@ describe 'Merchant relationships' do
     items = JSON.parse(response.body)
 
     expect(items["data"].count).to eq(3)
-    expect(items["data"][0]["attributes"]["merchant_id"]).to eq(merchant_1.id)
+    expect(items["data"][0]["type"]).to eq("associated_item")
   end
   it "returns a collection of invoices associated with that merchant" do
     customer_1 = create(:customer)
@@ -36,7 +36,7 @@ describe 'Merchant relationships' do
     invoices = JSON.parse(response.body)
 
     expect(invoices["data"].count).to eq(2)
-    expect(invoices["data"][0]["attributes"]["merchant_id"]).to eq(merchant_1.id)
+    expect(invoices["data"][0]["type"]).to eq("associated_invoice")
   end
 end
 describe 'Invoice Relationships' do

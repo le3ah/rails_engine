@@ -81,5 +81,18 @@ describe "Transactions API" do
 
       expect(transaction["data"]["id"]).to eq(transaction_1.id.to_s)
     end
+    it "can find a single object by created_at" do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant, customer: customer)
+      transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success", created_at: "012-03-27 14:54:09 UTC")
+
+      get "/api/v1/transactions/find?created_at=#{transaction_1.created_at}"
+
+      transaction = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(transaction["data"]["id"]).to eq(transaction_1.id.to_s)
+    end
   end
 end

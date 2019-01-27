@@ -26,5 +26,25 @@ RSpec.describe Customer, type: :model do
 
       expect(customer_1.favorite_merchant).to eq(merchant_2)
     end
+    it "#find_transactions" do
+      customer_1 = create(:customer)
+      customer_2 = create(:customer)
+
+      merchant_1 = create(:merchant)
+      merchant_2 = create(:merchant)
+
+      item_1 = create(:item, merchant: merchant_1)
+      item_2 = create(:item, merchant: merchant_2)
+      invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
+      invoice_2 = create(:invoice, merchant: merchant_2, customer: customer_1)
+      invoice_3 = create(:invoice, merchant: merchant_2, customer: customer_2)
+
+      transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+      transaction_2 = create(:transaction, invoice_id: invoice_2.id, result: "success", updated_at: "012-03-25 14:54:09 UTC")
+      transaction_3 = create(:transaction, invoice_id: invoice_3.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+
+      expect(customer_1.find_transactions.count).to eq(2)
+      expect(customer_2.find_transactions.count).to eq(1)
+    end
   end
 end

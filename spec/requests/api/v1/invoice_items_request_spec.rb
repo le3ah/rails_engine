@@ -196,5 +196,33 @@ describe "Invoice Items API" do
 
       expect(invoice_item["data"][0]["attributes"]["id"]).to eq(invoice_item_1.id)
     end
+    it "can find all matches based on created_at" do
+      merchant_1 = create(:merchant)
+      customer_1 = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
+      item_1 = create(:item, merchant: merchant_1)
+      invoice_item_1 = create(:invoice_item, quantity: 1, unit_price: 50, item_id: item_1.id, invoice_id: invoice_1.id, created_at: "2012-03-27 14:54:09 UTC")
+
+      get "/api/v1/invoice_items/find_all?created_at=#{invoice_item_1.created_at}"
+
+      invoice_item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(invoice_item["data"][0]["attributes"]["id"]).to eq(invoice_item_1.id)
+    end
+    it "can find all matches based on updated_at" do
+      merchant_1 = create(:merchant)
+      customer_1 = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
+      item_1 = create(:item, merchant: merchant_1)
+      invoice_item_1 = create(:invoice_item, quantity: 1, unit_price: 50, item_id: item_1.id, invoice_id: invoice_1.id, updated_at: "2012-03-27 14:54:09 UTC")
+
+      get "/api/v1/invoice_items/find_all?updated_at=#{invoice_item_1.updated_at}"
+
+      invoice_item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(invoice_item["data"][0]["attributes"]["id"]).to eq(invoice_item_1.id)
+    end
   end
 end

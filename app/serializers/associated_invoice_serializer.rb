@@ -1,4 +1,4 @@
 class AssociatedInvoiceSerializer
   include FastJsonapi::ObjectSerializer
-  attributes 
+  attributes :merchant_id
 end

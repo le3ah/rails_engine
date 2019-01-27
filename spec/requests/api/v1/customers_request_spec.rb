@@ -40,7 +40,7 @@ describe "Customers API" do
       customer = JSON.parse(response.body)
       expect(response).to be_successful
 
-      expect(customer["data"][0]["attributes"]["first_name"]).to eq(first_name)
+      expect(customer["data"]["attributes"]["first_name"]).to eq(first_name)
     end
     it "can find a single object by first name case_insensitive" do
       first_name = create(:customer, first_name: "Kathy").first_name
@@ -49,7 +49,7 @@ describe "Customers API" do
       customer = JSON.parse(response.body)
       expect(response).to be_successful
 
-      expect(customer["data"][0]["attributes"]["first_name"]).to eq(first_name)
+      expect(customer["data"]["attributes"]["first_name"]).to eq(first_name)
     end
     it "can find a single object by last name" do
       last_name = create(:customer).last_name
@@ -58,7 +58,7 @@ describe "Customers API" do
       customer = JSON.parse(response.body)
       expect(response).to be_successful
 
-      expect(customer["data"][0]["attributes"]["last_name"]).to eq(last_name)
+      expect(customer["data"]["attributes"]["last_name"]).to eq(last_name)
     end
     it "can find a single object by last name case case_insensitive" do
       last_name = create(:customer).last_name
@@ -67,7 +67,7 @@ describe "Customers API" do
       customer = JSON.parse(response.body)
       expect(response).to be_successful
 
-      expect(customer["data"][0]["attributes"]["last_name"]).to eq(last_name)
+      expect(customer["data"]["attributes"]["last_name"]).to eq(last_name)
     end
   end
   context "parameter find all search" do
@@ -130,7 +130,7 @@ describe "Customers API" do
 
     item_1 = create(:item, merchant: merchant_1)
     item_2 = create(:item, merchant: merchant_2)
-  
+
     invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
     invoice_2 = create(:invoice, merchant: merchant_2, customer: customer_1)
     invoice_3 = create(:invoice, merchant: merchant_2, customer: customer_1)

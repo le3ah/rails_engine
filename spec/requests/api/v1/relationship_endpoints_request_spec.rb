@@ -138,8 +138,8 @@ describe 'Invoice Relationships' do
     get "/api/v1/invoices/#{invoice_1.id}/customer"
 
     expect(response).to be_successful
-    invoices = JSON.parse(response.body)
 
+    invoices = JSON.parse(response.body)
     expect(invoices["data"]["id"]).to eq(customer_1.id.to_s)
     expect(invoices["data"]["type"]).to eq("associated_customer")
   end

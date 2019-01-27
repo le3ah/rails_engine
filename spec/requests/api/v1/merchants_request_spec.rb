@@ -80,19 +80,39 @@ describe "Merchants API" do
       expect(merchant["data"][0]["attributes"]["id"]).to eq(id)
     end
     it "can find all matches based on name" do
-      customer_1 = create(:merchant, name: "George")
-      customer_2 = create(:merchant, name: "George")
-      customer_3 = create(:merchant, name: "George")
-      customer_4 = create(:merchant, name: "Sam")
+      merchant_1 = create(:merchant, name: "George")
+      merchant_2 = create(:merchant, name: "George")
+      merchant_3 = create(:merchant, name: "George")
+      merchant_4 = create(:merchant, name: "Sam")
 
-      get "/api/v1/merchants/find_all?name=#{customer_1.name}"
+      get "/api/v1/merchants/find_all?name=#{merchant_1.name}"
 
       merchant = JSON.parse(response.body)
       expect(response).to be_successful
-      expect(merchant["data"][0]["attributes"]["name"]).to eq(customer_1.name)
-      expect(merchant["data"][1]["attributes"]["name"]).to eq(customer_1.name)
-      expect(merchant["data"][-1]["attributes"]["name"]).to eq(customer_1.name)
+      expect(merchant["data"][0]["attributes"]["name"]).to eq(merchant_1.name)
+      expect(merchant["data"][1]["attributes"]["name"]).to eq(merchant_1.name)
+      expect(merchant["data"][-1]["attributes"]["name"]).to eq(merchant_1.name)
       expect(merchant["data"].count).to eq(3)
+    end
+    it "can find all matches based on created_at" do
+      merchant_1 = create(:merchant, created_at: "2012-03-27 14:53:59 UTC")
+
+      get "/api/v1/merchants/find_all?created_at=#{merchant_1.created_at}"
+
+      merchant = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(merchant["data"][0]["id"].to_i).to eq(merchant_1.id)
+    end
+    it "can find all matches based on updated_at" do
+      merchant_1 = create(:merchant, updated_at: "2012-03-27 14:53:59 UTC")
+
+      get "/api/v1/merchants/find_all?updated_at=#{merchant_1.updated_at}"
+
+      merchant = JSON.parse(response.body)
+      expect(response).to be_successful
+      
+      expect(merchant["data"][0]["id"].to_i).to eq(merchant_1.id)
     end
   end
   it "returns a random resource" do

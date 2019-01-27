@@ -17,6 +17,27 @@ describe "Items API" do
     expect(items.count).to eq(1)
     expect(items["data"].count).to eq(3)
   end
+  context "parameter find search" do
+    it "can find a single object by id" do
+      merchant = create(:merchant)
+      item_1 = create(:item, merchant: merchant)
+      get "/api/v1/items/find?id=#{item_1.id}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+      expect(item["data"]["id"]).to eq(item_1.id.to_s)
+    end
+    it "can find a single object by name" do
+      merchant = create(:merchant)
+      item_1 = create(:item, merchant: merchant)
+      get "/api/v1/items/find?name=#{item_1.name}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+      
+      expect(item["data"]["attributes"]["name"]).to eq(item_1.name)
+    end
+  end
   context "All Items Business Intelligence" do
     before :each do
       @merchant_1 = create(:merchant)

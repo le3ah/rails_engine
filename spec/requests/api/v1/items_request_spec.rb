@@ -88,6 +88,19 @@ describe "Items API" do
       expect(item["data"]["attributes"]["id"]).to eq(item_1.id)
     end
   end
+  context "parameter find all search" do
+    it "can find all matches based on id" do
+      merchant_1 = create(:merchant)
+      item_1 = create(:item, merchant: merchant_1)
+
+      get "/api/v1/items/find_all?id=#{item_1.id}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+    
+      expect(item["data"][0]["attributes"]["id"]).to eq(item_1.id)
+    end
+  end
   context "All Items Business Intelligence" do
     before :each do
       @merchant_1 = create(:merchant)

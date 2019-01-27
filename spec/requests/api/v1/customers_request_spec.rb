@@ -40,7 +40,16 @@ describe "Customers API" do
       customer = JSON.parse(response.body)
       expect(response).to be_successful
 
-      expect(customer["data"]["attributes"]["first_name"]).to eq(first_name)
+      expect(customer["data"][0]["attributes"]["first_name"]).to eq(first_name)
+    end
+    it "can find a single object by first name case_insensitive" do
+      first_name = create(:customer, first_name: "Kathy").first_name
+
+      get "/api/v1/customers/find?first_name=#{first_name.upcase}"
+      customer = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(customer["data"][0]["attributes"]["first_name"]).to eq(first_name)
     end
     it "can find a single object by last name" do
       last_name = create(:customer).last_name
@@ -49,7 +58,16 @@ describe "Customers API" do
       customer = JSON.parse(response.body)
       expect(response).to be_successful
 
-      expect(customer["data"]["attributes"]["last_name"]).to eq(last_name)
+      expect(customer["data"][0]["attributes"]["last_name"]).to eq(last_name)
+    end
+    it "can find a single object by last name case case_insensitive" do
+      last_name = create(:customer).last_name
+
+      get "/api/v1/customers/find?last_name=#{last_name.upcase}"
+      customer = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(customer["data"][0]["attributes"]["last_name"]).to eq(last_name)
     end
   end
   context "parameter find all search" do

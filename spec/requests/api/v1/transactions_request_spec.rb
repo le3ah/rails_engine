@@ -108,4 +108,19 @@ describe "Transactions API" do
       expect(transaction["data"]["id"]).to eq(transaction_1.id.to_s)
     end
   end
+  context "parameter find all search" do
+    it "can find all matches based on id" do
+      merchant_1 = create(:merchant)
+      customer_1 = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
+      transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+
+      get "/api/v1/transactions/find_all?id=#{transaction_1.id}"
+
+      transaction = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(transaction["data"][0]["attributes"]["id"]).to eq(transaction_1.id)
+    end
+  end
 end

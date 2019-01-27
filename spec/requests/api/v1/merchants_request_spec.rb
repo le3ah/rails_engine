@@ -60,6 +60,14 @@ describe "Merchants API" do
       expect(response).to be_successful
       expect(merchant["data"]["attributes"]["id"]).to eq(merchant_1.id)
     end
+    it "can find by updated_at date" do
+      merchant_1 = create(:merchant, updated_at: "2012-03-27 14:53:59 UTC")
+
+      get "/api/v1/merchants/find?updated_at=#{merchant_1.updated_at}"
+      merchant = JSON.parse(response.body)
+      expect(response).to be_successful
+      expect(merchant["data"]["attributes"]["id"]).to eq(merchant_1.id)
+    end
   end
   context "parameter find all search" do
     it "can find all matches based on id" do

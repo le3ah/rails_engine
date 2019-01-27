@@ -144,6 +144,28 @@ describe "Items API" do
 
       expect(item["data"][0]["attributes"]["id"]).to eq(item_1.id)
     end
+    it "can find all matches based on created_at" do
+      merchant_1 = create(:merchant)
+      item_1 = create(:item, merchant: merchant_1, created_at: "2012-03-27 14:53:59 UTC")
+
+      get "/api/v1/items/find_all?created_at=#{item_1.created_at}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(item["data"][0]["attributes"]["id"]).to eq(item_1.id)
+    end
+    it "can find all matches based on updated_at" do
+      merchant_1 = create(:merchant)
+      item_1 = create(:item, merchant: merchant_1, updated_at: "2012-03-27 14:53:59 UTC")
+
+      get "/api/v1/items/find_all?updated_at=#{item_1.updated_at}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(item["data"][0]["attributes"]["id"]).to eq(item_1.id)
+    end
   end
   context "All Items Business Intelligence" do
     before :each do

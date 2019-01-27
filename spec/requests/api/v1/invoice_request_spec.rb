@@ -71,5 +71,15 @@ describe "Invoices API" do
       expect(response).to be_successful
       expect(invoice["data"]["id"]).to eq(invoice_1.id.to_s)
     end
+    it "can find a single object by updated_at" do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant, customer: customer, updated_at: "2012-03-25 09:54:09 UTC")
+      get "/api/v1/invoices/find?updated_at=#{invoice_1.updated_at}"
+
+      invoice = JSON.parse(response.body)
+      expect(response).to be_successful
+      expect(invoice["data"]["id"]).to eq(invoice_1.id.to_s)
+    end
   end
 end

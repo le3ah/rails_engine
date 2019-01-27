@@ -122,6 +122,17 @@ describe "Items API" do
 
       expect(item["data"][0]["attributes"]["id"]).to eq(item_1.id)
     end
+    it "can find all matches based on unit_price" do
+      merchant_1 = create(:merchant)
+      item_1 = create(:item, merchant: merchant_1)
+
+      get "/api/v1/items/find_all?unit_price=#{item_1.unit_price}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(item["data"][0]["attributes"]["id"]).to eq(item_1.id)
+    end
   end
   context "All Items Business Intelligence" do
     before :each do

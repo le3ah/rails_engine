@@ -69,6 +69,22 @@ describe "Customers API" do
 
       expect(customer["data"]["attributes"]["last_name"]).to eq(last_name)
     end
+    it "can find by created_at date" do
+      customer_1 = create(:customer, created_at: "2012-03-27 14:53:59 UTC")
+
+      get "/api/v1/customers/find?created_at=#{customer_1.created_at}"
+      customer = JSON.parse(response.body)
+      expect(response).to be_successful
+      expect(customer["data"]["attributes"]["id"]).to eq(customer_1.id)
+    end
+    it "can find by updated_at date" do
+      customer_1 = create(:customer, updated_at: "2012-03-27 14:53:59 UTC")
+
+      get "/api/v1/customers/find?updated_at=#{customer_1.updated_at}"
+      customer = JSON.parse(response.body)
+      expect(response).to be_successful
+      expect(customer["data"]["attributes"]["id"]).to eq(customer_1.id)
+    end
   end
   context "parameter find all search" do
     it "can find all matches based on id" do

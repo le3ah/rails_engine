@@ -17,6 +17,77 @@ describe "Items API" do
     expect(items.count).to eq(1)
     expect(items["data"].count).to eq(3)
   end
+  context "parameter find search" do
+    it "can find a single object by id" do
+      merchant = create(:merchant)
+      item_1 = create(:item, merchant: merchant)
+      get "/api/v1/items/find?id=#{item_1.id}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+      expect(item["data"]["id"]).to eq(item_1.id.to_s)
+    end
+    it "can find a single object by name" do
+      merchant = create(:merchant)
+      item_1 = create(:item, merchant: merchant)
+      get "/api/v1/items/find?name=#{item_1.name}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(item["data"]["attributes"]["name"]).to eq(item_1.name)
+    end
+    it "can find a single object by description" do
+      merchant = create(:merchant)
+      item_1 = create(:item, merchant: merchant)
+      get "/api/v1/items/find?description=#{item_1.description}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(item["data"]["attributes"]["description"]).to eq(item_1.description)
+    end
+    it "can find a single object by unit_price" do
+      merchant = create(:merchant)
+      item_1 = create(:item, merchant: merchant)
+      get "/api/v1/items/find?unit_price=#{item_1.unit_price}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(item["data"]["attributes"]["unit_price"]).to eq(item_1.unit_price)
+    end
+    it "can find a single object by merchant_id" do
+      merchant = create(:merchant)
+      item_1 = create(:item, merchant: merchant)
+      get "/api/v1/items/find?merchant_id=#{item_1.merchant_id}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(item["data"]["attributes"]["merchant_id"]).to eq(item_1.merchant_id)
+    end
+    it "can find a single object by created_at" do
+      merchant = create(:merchant)
+      item_1 = create(:item, merchant: merchant, created_at: "2012-03-27 14:53:59 UTC")
+      get "/api/v1/items/find?created_at=#{item_1.created_at}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(item["data"]["attributes"]["id"]).to eq(item_1.id)
+    end
+    it "can find a single object by updated_at" do
+      merchant = create(:merchant)
+      item_1 = create(:item, merchant: merchant, updated_at: "2012-03-27 14:53:59 UTC")
+      get "/api/v1/items/find?updated_at=#{item_1.updated_at}"
+
+      item = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(item["data"]["attributes"]["id"]).to eq(item_1.id)
+    end
+  end
   context "All Items Business Intelligence" do
     before :each do
       @merchant_1 = create(:merchant)

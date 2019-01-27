@@ -28,4 +28,84 @@ describe "Transactions API" do
     expect(transactions.count).to eq(1)
     expect(transactions["data"].count).to eq(3)
   end
+  context "parameter find search" do
+    it "can find a single object by id" do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant, customer: customer)
+      transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+
+      get "/api/v1/transactions/find?id=#{transaction_1.id}"
+
+      transaction = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(transaction["data"]["id"]).to eq(transaction_1.id.to_s)
+    end
+    it "can find a single object by invoice_id" do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant, customer: customer)
+      transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+
+      get "/api/v1/transactions/find?invoice_id=#{transaction_1.invoice_id}"
+
+      transaction = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(transaction["data"]["id"]).to eq(transaction_1.id.to_s)
+    end
+    it "can find a single object by credit_card_number" do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant, customer: customer)
+      transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+
+      get "/api/v1/transactions/find?credit_card_number=#{transaction_1.credit_card_number}"
+
+      transaction = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(transaction["data"]["id"]).to eq(transaction_1.id.to_s)
+    end
+    it "can find a single object by result" do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant, customer: customer)
+      transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+
+      get "/api/v1/transactions/find?result=#{transaction_1.result}"
+
+      transaction = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(transaction["data"]["id"]).to eq(transaction_1.id.to_s)
+    end
+    it "can find a single object by created_at" do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant, customer: customer)
+      transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success", created_at: "012-03-27 14:54:09 UTC")
+
+      get "/api/v1/transactions/find?created_at=#{transaction_1.created_at}"
+
+      transaction = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(transaction["data"]["id"]).to eq(transaction_1.id.to_s)
+    end
+    it "can find a single object by updated_at" do
+      merchant = create(:merchant)
+      customer = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant, customer: customer)
+      transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+
+      get "/api/v1/transactions/find?updated_at=#{transaction_1.updated_at}"
+
+      transaction = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(transaction["data"]["id"]).to eq(transaction_1.id.to_s)
+    end
+  end
 end

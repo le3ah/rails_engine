@@ -10,4 +10,10 @@ class Customer < ApplicationRecord
     .order("total_transactions desc")
     .where("invoices.customer_id = #{self.id}")[0]
   end
+
+  def find_transactions
+    invoices.map do |invoice|
+      Transaction.where(invoice_id: invoice.id)
+    end.flatten
+  end
 end

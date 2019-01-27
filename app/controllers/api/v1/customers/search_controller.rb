@@ -3,9 +3,9 @@ class Api::V1::Customers::SearchController < ApplicationController
     if params[:id]
       render json: CustomerSerializer.new(Customer.find(params[:id]))
     elsif params[:first_name]
-      render json: CustomerSerializer.new(Customer.where("first_name ILIKE '#{params[:first_name]}'"))
+      render json: CustomerSerializer.new(Customer.find_by("first_name ILIKE '#{params[:first_name]}'"))
     else
-      render json: CustomerSerializer.new(Customer.where("last_name ILIKE '#{params[:last_name]}'"))
+      render json: CustomerSerializer.new(Customer.find_by("last_name ILIKE '#{params[:last_name]}'"))
     end
   end
 

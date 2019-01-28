@@ -125,15 +125,8 @@ describe 'Invoice Relationships' do
     customer_1 = create(:customer)
     customer_2 = create(:customer)
     merchant_1 = create(:merchant)
-    merchant_2 = create(:merchant)
-
-    item_1 = create(:item, merchant: merchant_1)
-    item_2 = create(:item, merchant: merchant_1)
-    item_3 = create(:item, merchant: merchant_2)
 
     invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
-    invoice_2 = create(:invoice, merchant: merchant_1, customer: customer_1)
-    invoice_3 = create(:invoice, merchant: merchant_2, customer: customer_1)
 
     get "/api/v1/invoices/#{invoice_1.id}/customer"
 
@@ -141,21 +134,15 @@ describe 'Invoice Relationships' do
 
     invoices = JSON.parse(response.body)
     expect(invoices["data"]["id"]).to eq(customer_1.id.to_s)
+    expect(invoices["data"]["id"]).to_not eq(customer_2.id.to_s)
     expect(invoices["data"]["type"]).to eq("associated_customer")
   end
   it "returns the associated merchant" do
     customer_1 = create(:customer)
-    customer_2 = create(:customer)
     merchant_1 = create(:merchant)
     merchant_2 = create(:merchant)
 
-    item_1 = create(:item, merchant: merchant_1)
-    item_2 = create(:item, merchant: merchant_1)
-    item_3 = create(:item, merchant: merchant_2)
-
     invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
-    invoice_2 = create(:invoice, merchant: merchant_1, customer: customer_1)
-    invoice_3 = create(:invoice, merchant: merchant_2, customer: customer_1)
 
     get "/api/v1/invoices/#{invoice_1.id}/merchant"
 
@@ -163,26 +150,21 @@ describe 'Invoice Relationships' do
     invoices = JSON.parse(response.body)
 
     expect(invoices["data"]["id"]).to eq(merchant_1.id.to_s)
+    expect(invoices["data"]["id"]).to_not eq(merchant_2.id.to_s)
     expect(invoices["data"]["type"]).to eq("associated_merchant")
   end
 end
 describe 'Invoice Items relationships' do
-  it "returns a the associated invoice" do
+  it "returns the associated invoice" do
     customer_1 = create(:customer)
     merchant_1 = create(:merchant)
-    merchant_2 = create(:merchant)
 
     item_1 = create(:item, merchant: merchant_1)
-    item_2 = create(:item, merchant: merchant_1)
-    item_3 = create(:item, merchant: merchant_2)
 
     invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
     invoice_2 = create(:invoice, merchant: merchant_1, customer: customer_1)
-    invoice_3 = create(:invoice, merchant: merchant_2, customer: customer_1)
 
     invoice_item_1 = create(:invoice_item, quantity: 1, unit_price: 50, item_id: item_1.id, invoice_id: invoice_1.id)
-    invoice_item_2 = create(:invoice_item, quantity: 2, unit_price: 100, item_id: item_2.id, invoice_id: invoice_1.id)
-    invoice_item_3 = create(:invoice_item, quantity: 3, unit_price: 200, item_id: item_3.id, invoice_id: invoice_2.id)
 
     get "/api/v1/invoice_items/#{invoice_item_1.id}/invoice"
 
@@ -190,24 +172,19 @@ describe 'Invoice Items relationships' do
     invoice = JSON.parse(response.body)
 
     expect(invoice["data"]["id"]).to eq(invoice_1.id.to_s)
+    expect(invoice["data"]["id"]).to_not eq(invoice_2.id.to_s)
     expect(invoice["data"]["type"]).to eq("associated_invoice")
   end
-  it "returns a the associated item" do
+  it "returns the associated item" do
     customer_1 = create(:customer)
     merchant_1 = create(:merchant)
-    merchant_2 = create(:merchant)
 
     item_1 = create(:item, merchant: merchant_1)
     item_2 = create(:item, merchant: merchant_1)
-    item_3 = create(:item, merchant: merchant_2)
 
     invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
-    invoice_2 = create(:invoice, merchant: merchant_1, customer: customer_1)
-    invoice_3 = create(:invoice, merchant: merchant_2, customer: customer_1)
 
     invoice_item_1 = create(:invoice_item, quantity: 1, unit_price: 50, item_id: item_1.id, invoice_id: invoice_1.id)
-    invoice_item_2 = create(:invoice_item, quantity: 2, unit_price: 100, item_id: item_2.id, invoice_id: invoice_1.id)
-    invoice_item_3 = create(:invoice_item, quantity: 3, unit_price: 200, item_id: item_3.id, invoice_id: invoice_2.id)
 
     get "/api/v1/invoice_items/#{invoice_item_1.id}/item"
 
@@ -215,6 +192,7 @@ describe 'Invoice Items relationships' do
     item = JSON.parse(response.body)
 
     expect(item["data"]["id"]).to eq(item_1.id.to_s)
+    expect(item["data"]["id"]).to_not eq(item_2.id.to_s)
     expect(item["data"]["type"]).to eq("associated_item")
   end
 end
@@ -225,12 +203,10 @@ describe 'Items relationships' do
     merchant_2 = create(:merchant)
 
     item_1 = create(:item, merchant: merchant_1)
-    item_2 = create(:item, merchant: merchant_1)
     item_3 = create(:item, merchant: merchant_2)
 
     invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
     invoice_2 = create(:invoice, merchant: merchant_1, customer: customer_1)
-    invoice_3 = create(:invoice, merchant: merchant_2, customer: customer_1)
 
     invoice_item_1 = create(:invoice_item, quantity: 1, unit_price: 50, item_id: item_1.id, invoice_id: invoice_1.id)
     invoice_item_2 = create(:invoice_item, quantity: 2, unit_price: 100, item_id: item_1.id, invoice_id: invoice_1.id)
@@ -240,8 +216,11 @@ describe 'Items relationships' do
 
     expect(response).to be_successful
     invoice_items = JSON.parse(response.body)
-# binding.pry
+
     expect(invoice_items["data"][0]["id"]).to eq(invoice_item_1.id.to_s)
+    expect(invoice_items["data"][1]["id"]).to eq(invoice_item_2.id.to_s)
+    expect(invoice_items["data"][0]["id"]).to_not eq(invoice_item_3.id.to_s)
+    expect(invoice_items["data"][1]["id"]).to_not eq(invoice_item_3.id.to_s)
     expect(invoice_items["data"].count).to eq(2)
     expect(invoice_items["data"][0]["type"]).to eq("associated_invoice_item")
   end

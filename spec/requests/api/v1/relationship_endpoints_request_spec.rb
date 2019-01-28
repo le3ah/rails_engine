@@ -239,11 +239,11 @@ describe 'Items relationships' do
     get "/api/v1/items/#{item_1.id}/invoice_items"
 
     expect(response).to be_successful
-    invoice = JSON.parse(response.body)
-
-    expect(invoice["data"][0]["attributes"]["invoice_id"]).to eq(invoice_1.id)
-    expect(invoice["data"].count).to eq(2)
-    expect(invoice["data"][0]["type"]).to eq("associated_invoice_item")
+    invoice_items = JSON.parse(response.body)
+# binding.pry
+    expect(invoice_items["data"][0]["id"]).to eq(invoice_item_1.id.to_s)
+    expect(invoice_items["data"].count).to eq(2)
+    expect(invoice_items["data"][0]["type"]).to eq("associated_invoice_item")
   end
   it "returns a the associated merchant" do
     customer_1 = create(:customer)

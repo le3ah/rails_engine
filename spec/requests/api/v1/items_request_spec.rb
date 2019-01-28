@@ -17,6 +17,16 @@ describe "Items API" do
     expect(items.count).to eq(1)
     expect(items["data"].count).to eq(3)
   end
+  it "displays one item" do
+    merchant_1 = create(:merchant)
+    item_1 = create(:item, merchant: merchant_1)
+
+    get "/api/v1/items/#{item_1.id}"
+    expect(response).to be_successful
+    items = JSON.parse(response.body)
+
+    expect(items["data"]["id"]).to eq(item_1.id.to_s)
+  end
   context "parameter find search" do
     it "can find a single object by id" do
       merchant = create(:merchant)

@@ -126,6 +126,26 @@ describe "Customers API" do
       expect(customer["data"][-1]["attributes"]["last_name"]).to eq(customer_1.last_name)
       expect(customer["data"].count).to eq(3)
     end
+    it "can find all matches based on created_at" do
+      customer_1 = create(:customer, created_at: "2012-03-27 14:53:59 UTC")
+
+      get "/api/v1/customers/find_all?created_at=#{customer_1.created_at}"
+
+      customer = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(customer["data"][0]["id"].to_i).to eq(customer_1.id)
+    end
+    it "can find all matches based on updated_at" do
+      customer_1 = create(:customer, updated_at: "2012-03-27 14:53:59 UTC")
+
+      get "/api/v1/customers/find_all?updated_at=#{customer_1.updated_at}"
+
+      customer = JSON.parse(response.body)
+      expect(response).to be_successful
+
+      expect(customer["data"][0]["id"].to_i).to eq(customer_1.id)
+    end
   end
   it "returns a random resource" do
     customer_1 = create(:customer)

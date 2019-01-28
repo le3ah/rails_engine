@@ -28,6 +28,18 @@ describe "Transactions API" do
     expect(transactions.count).to eq(1)
     expect(transactions["data"].count).to eq(3)
   end
+  it "displays one transaction" do
+    customer_1 = create(:customer)
+    merchant_1 = create(:merchant)
+    invoice_1 = create(:invoice, merchant: merchant_1, customer: customer_1)
+    transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success", updated_at: "012-03-27 14:54:09 UTC")
+
+    get "/api/v1/transactions/#{transaction_1.id}"
+    expect(response).to be_successful
+    transactions = JSON.parse(response.body)
+
+    expect(transactions["data"]["id"]).to eq(transaction_1.id.to_s)
+  end
   context "parameter find search" do
     it "can find a single object by id" do
       merchant = create(:merchant)

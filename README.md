@@ -6,6 +6,14 @@ This is a project designed to use Rails and ActiveRecord in order to build a JSO
 - Learn how to use controller tests to drive your design
 - Use Ruby and ActiveRecord to perform more complicated business intelligence
 
+## Tech Used
+- Rails
+- PostgreSQL
+- RSpec
+- FactoryBot
+- ShouldaMatchers
+- SimpleCov
+
 
 * Ruby version - ruby 2.4.5
 
@@ -14,6 +22,9 @@ This is a project designed to use Rails and ActiveRecord in order to build a JSO
 
 * Table Relationships as follows:
 ![schema](railsschema.png)
+
+* I wrote a blog post!
+Please feel free to visit: https://medium.com/@le3ah/rails-engine-a5d2e3aab1ce
 
 * I imported the database files using an `import.rake` file.  Code example:
 ```desc "Imports a CSV of all entities"

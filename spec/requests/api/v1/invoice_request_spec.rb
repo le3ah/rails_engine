@@ -29,7 +29,7 @@ describe "Invoices API" do
     get "/api/v1/invoices/#{invoice_1.id}"
     expect(response).to be_successful
     invoices = JSON.parse(response.body)
-# binding.pry
+
     expect(invoices["data"]["id"]).to eq(invoice_1.id.to_s)
   end
   context "parameter find search" do

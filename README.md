@@ -1,6 +1,8 @@
 ## Rails Engine
 This is a project designed to use Rails and ActiveRecord in order to build a JSON API which exposes the SalesEngine data schema.
 
+* Author: Leah K. Miller
+
 ## Learning Goals
 - Learn how to build Single-Responsibility controllers to provide a well-designed and versioned API
 - Learn how to use controller tests to drive your design
